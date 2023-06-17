@@ -29,10 +29,12 @@ useHead({
 <template>
   <div class="page-container">
     <nav>
-      <h1>
-        AvanzaRäknaren
-        <Icon name="material-symbols:calculate" />
-      </h1>
+      <nuxt-link to="/" class="logo">
+        <h1>
+          AvanzaRäknaren
+          <Icon name="material-symbols:calculate" />
+        </h1>
+      </nuxt-link>
       <nuxt-link to="procent">Ökning / Minskning</nuxt-link>
       <nuxt-link to="framtid">Framtidsräknare</nuxt-link>
       <nuxt-link to="dca">Dollar Cost Average</nuxt-link>
@@ -104,7 +106,7 @@ nav a {
   text-decoration: none;
 }
 
-nav a.router-link-active {
+nav a.router-link-active:not(.logo) {
   border-color: var(--primary);
 }
 

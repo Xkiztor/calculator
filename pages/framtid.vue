@@ -11,7 +11,9 @@ const totalMoney = computed(() => {
 
   // let futureMonthlyInvest = (monthlyInvestment.value * 12) * (Math.pow(1 + decimalIncrease, years.value - 1))
 
-  let futureMonthlyInvest = Math.pow(monthlyInvestment.value * 12 * (decimalIncrease + 1), years.value)
+  // let futureMonthlyInvest = Math.pow(monthlyInvestment.value * 12 * (decimalIncrease + 1), years.value)
+
+  let futureMonthlyInvest = monthlyInvestment.value * (Math.pow(1 + decimalIncrease, years.value - 1) / decimalIncrease)
 
   let total = futureInitial + futureMonthlyInvest
 
