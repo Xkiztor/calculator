@@ -28,6 +28,15 @@ useHead({
 
 <template>
   <div class="page-container">
+    <nav>
+      <h1>
+        AvanzaRäknaren
+        <Icon name="material-symbols:calculate" />
+      </h1>
+      <nuxt-link to="procent">Ökning / Minskning</nuxt-link>
+      <nuxt-link to="framtid">Framtidsräknare</nuxt-link>
+      <nuxt-link to="dca">Dollar Cost Average</nuxt-link>
+    </nav>
     <slot />
   </div>
 </template>
@@ -73,8 +82,52 @@ body {
 .page-container {
   /* min-width: 100%; */
   /* min-height: 100%; */
-  padding: var(--padding);
+  /* padding: var(--padding); */
   display: grid;
   place-items: start center;
+}
+
+nav {
+  height: 70px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: calc(var(--padding) * 3);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--padding);
+}
+
+nav a {
+  padding: var(--padding) var(--padding) 6px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0);
+  text-decoration: none;
+}
+
+nav a.router-link-active {
+  border-color: var(--primary);
+}
+
+nav h1 {
+  margin: 0 calc(var(--padding) * 3) 0 var(--padding);
+  font-size: 1.2rem;
+}
+
+nav h1 .icon {
+  font-size: 2rem;
+}
+
+nav h1 .icon * {
+  color: var(--primary);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
 </style>

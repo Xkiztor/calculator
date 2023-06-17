@@ -37,11 +37,6 @@ const prefix = computed(() => isNegative.value ? '-' : '')
 
 <template>
   <div class="page percentage">
-    <div class="card mode-selector">
-      <button @click="mode = 1" :class="{ 'selected': mode === 1 }">Ökning / Minskning</button>
-      <button @click="mode = 2" :class="{ 'selected': mode === 2 }">X av %</button>
-      <button @click="mode = 3" :class="{ 'selected': mode === 3 }">% av X</button>
-    </div>
     <div class="card">
       <div class="big-number">
         <h1 v-if="percentageDif && from && to" class="number"
@@ -100,42 +95,7 @@ const prefix = computed(() => isNegative.value ? '-' : '')
   width: 100%;
 }
 
-.card.mode-selector {
-  /* display: flex; */
-  /* justify-content: space-between; */
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  place-items: center;
-  width: 100%;
-  background: none;
-  box-shadow: none;
-}
-
-.mode-selector button {
-  border: none;
-  background: none;
-  color: var(--text-color);
-  cursor: pointer;
-  border-bottom: 2px solid rgba(0, 0, 0, 0);
-  padding: var(--padding);
-}
-
-.mode-selector button.selected {
-  /* font-size: 101%; */
-  border-color: var(--primary);
-}
-
 .percentage .card {
   padding: 22px 14px;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type=number] {
-  -moz-appearance: textfield;
 }
 </style>
