@@ -1,0 +1,20 @@
+:root {
+  --bg-color: #031d20;
+  --element-color: #072528;
+  --element-hover: #07383e;
+  --inline-highlight: #0c3034;
+  --border-color: #07383e;
+  --border-highlight: #006774;
+
+  --text-color: #ffffff;
+  --blue-text: #2cb3c2;
+  --blue-text-highlight: #d0edf1;
+  --primary: #00c281;
+  --positive: #23a3ff;
+  --negative: #f04274;
+
+  --border-radius: 12px;
+  --small-border-radius: 4px;
+  --box-shadow: 0 1px 11px 0 rgba(0, 0, 0, 0.6);
+  --padding: 12px;
+}
