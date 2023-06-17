@@ -2,7 +2,7 @@
 import 'assets/main.css'
 
 useHead({
-  title: 'Calculator',
+  title: 'Avanza Räknaren',
   htmlAttrs: {
     lang: 'se',
   },
@@ -31,7 +31,7 @@ useHead({
     <nav>
       <nuxt-link to="/" class="logo">
         <h1>
-          AvanzaRäknaren
+          Avanza Räknaren
           <Icon name="material-symbols:calculate" />
         </h1>
       </nuxt-link>
