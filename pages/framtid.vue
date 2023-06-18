@@ -7,15 +7,29 @@ const monthlyInvestment = ref(0)
 const totalMoney = computed(() => {
   let decimalIncrease = annualIncrease.value / 100
 
+  let months = years.value * 12
+
+  let monthlyReturnRate = 1 + decimalIncrease / 12
+
+  let investmentValue = initial.value
+
+  for (let i = 0; i < months; i++) {
+    investmentValue = (investmentValue + monthlyInvestment.value) * monthlyReturnRate
+  }
+
+  return investmentValue.toFixed(2)
+
+
+
   let futureInitial = initial.value * Math.pow((1 + decimalIncrease), years.value)
 
   // let futureMonthlyInvest = (monthlyInvestment.value * 12) * (Math.pow(1 + decimalIncrease, years.value - 1))
 
   // let futureMonthlyInvest = Math.pow(monthlyInvestment.value * 12 * (decimalIncrease + 1), years.value)
 
-  let futureMonthlyInvest = monthlyInvestment.value * (Math.pow(1 + decimalIncrease, years.value - 1) / decimalIncrease)
+  let futureMonthlyInvested = monthlyInvestment.value * (Math.pow(1 + decimalIncrease, years.value - 1) / decimalIncrease)
 
-  let total = futureInitial + futureMonthlyInvest
+  let total = futureInitial + futureMonthlyInvested
 
   let rounded = Math.round(total * 100) / 100
 
@@ -26,26 +40,36 @@ const totalMoney = computed(() => {
 
 
 <template>
-  <div class="card future">
-    <div class="big-number">
-      <h1 class="number">{{ totalMoney }} kr</h1>
+  <div class="page framtid">
+    <div class="titles">
+      <h1 class="number title">
+        <Icon name="ph:chart-line-up-bold" />
+        Framtidsräknare
+      </h1>
+      <h2 class="description">Här kan du räkna ut ditt slutliga kapital efter x antal</h2>
+      <h2 class="description">år efter investering</h2>
     </div>
-    <div class="inputs">
-      <div>
-        <label>År</label>
-        <input type="number" v-model="years">
+    <div class="card future">
+      <div class="big-number">
+        <h1 class="number">{{ totalMoney }} kr</h1>
       </div>
-      <div>
-        <label>Startbelopp</label>
-        <input type="number" v-model="initial">
-      </div>
-      <div>
-        <label>Ökning per år</label>
-        <input type="number" v-model="annualIncrease">
-      </div>
-      <div>
-        <label>Investering i månaden</label>
-        <input type="number" v-model="monthlyInvestment">
+      <div class="inputs">
+        <div>
+          <label>År</label>
+          <input type="number" v-model="years">
+        </div>
+        <div>
+          <label>Startbelopp</label>
+          <input type="number" v-model="initial">
+        </div>
+        <div>
+          <label>Ökning per år</label>
+          <input type="number" v-model="annualIncrease">
+        </div>
+        <div>
+          <label>Investering i månaden</label>
+          <input type="number" v-model="monthlyInvestment">
+        </div>
       </div>
     </div>
   </div>
