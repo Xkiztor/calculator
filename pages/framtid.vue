@@ -22,9 +22,9 @@ ChartJS.register(
 )
 
 const years = ref(20)
-const initial = ref(8000)
+const initial = ref()
 const annualIncrease = ref(7)
-const monthlyInvestment = ref(600)
+const monthlyInvestment = ref()
 
 const totalMoney = computed(() => {
   let decimalIncrease = annualIncrease.value / 100
@@ -87,11 +87,11 @@ const moneyArray = computed(() => {
         data: investmentValues,
       },
       {
-        label: 'Utan Tillväxt',
+        label: 'Utan Avkastning',
         backgroundColor: '#2cb3c2',
         borderColor: "#2cb3c2",
         data: noGrowth
-      }
+      },
     ]
   }
 
@@ -209,24 +209,25 @@ const options = {
     <div class="card future">
       <div class="padding">
         <div class="big-number">
-          <h1 class="number">{{ formatedNumber }} kr</h1>
+          <h1 v-if="formatedNumber === 'NaN'" class="number placeholder">- - -</h1>
+          <h1 v-else class="number">{{ formatedNumber }} kr</h1>
         </div>
         <div class="inputs">
-          <div>
-            <label>År</label>
+          <div class="years after">
+            <!-- <label>År</label> -->
             <input type="number" v-model="years">
           </div>
-          <div>
-            <label>Startbelopp</label>
+          <div class="kronor-start after">
+            <!-- <label>Startbelopp</label> -->
             <input type="number" v-model="initial">
           </div>
-          <div>
-            <label>Årlig ökning %</label>
-            <input type="number" v-model="annualIncrease">
-          </div>
-          <div>
-            <label>Investering i månaden</label>
+          <div class="monthly after">
+            <!-- <label>Investering per månaden</label> -->
             <input type="number" v-model="monthlyInvestment">
+          </div>
+          <div class="percentage after">
+            <!-- <label>Årlig avkastning</label> -->
+            <input type="number" class="percentage" v-model="annualIncrease">
           </div>
         </div>
 
@@ -267,11 +268,18 @@ const options = {
 
 .future .inputs div {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* grid-template-columns: 1fr 1fr; */
+  grid-template-columns: 1fr;
   place-items: center;
   gap: 1rem;
 
+  width: 100%;
+
   text-align: center;
+}
+
+.future input {
+  width: 100%;
 }
 
 .card.graph {
@@ -288,5 +296,38 @@ const options = {
 
 .framtid .card .padding {
   padding: var(--padding);
+}
+
+.after {
+  position: relative;
+}
+
+.after::after {
+  position: absolute;
+  right: 12px;
+  top: 0;
+  bottom: 0;
+  margin-top: auto;
+  height: fit-content;
+  margin-bottom: auto;
+  /* color: var(--blue-text); */
+  /* color: var(--primary); */
+  opacity: 0.9;
+}
+
+.percentage.after::after {
+  content: '% / år';
+}
+
+.kronor-start.after::after {
+  content: 'kr från start';
+}
+
+.years.after::after {
+  content: 'år';
+}
+
+.monthly.after::after {
+  content: 'kr / månaden';
 }
 </style>

@@ -37,7 +37,7 @@ useHead({
       </nuxt-link>
       <nuxt-link to="procent">Ökning / Minskning</nuxt-link>
       <nuxt-link to="framtid">Framtidsräknare</nuxt-link>
-      <nuxt-link to="dca">Dollar Cost Average</nuxt-link>
+      <!-- <nuxt-link to="dca">Dollar Cost Average</nuxt-link> -->
     </nav>
     <slot />
   </div>

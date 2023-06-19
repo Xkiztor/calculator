@@ -36,6 +36,7 @@ html {
 * {
   color: var(--text-color);
   font-size: 1.1rem;
+  box-sizing: border-box;
 }
 
 input {

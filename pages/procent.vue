@@ -97,9 +97,9 @@ const prefix = computed(() => isNegative.value ? '-' : '')
   gap: var(--padding);
 }
 
-.inputs input {
+/* .inputs input {
   width: auto;
-}
+} */
 
 
 .inputs .icon {
