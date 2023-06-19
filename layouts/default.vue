@@ -3,6 +3,10 @@ import 'assets/main.css'
 
 useHead({
   title: 'Avanza Räknaren',
+  meta: [{
+    name: 'description',
+    content: 'Ett smidig hjälpmedel för att räkna ut olika finansiella saker'
+  }],
   htmlAttrs: {
     lang: 'se',
   },

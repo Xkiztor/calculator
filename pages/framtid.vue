@@ -21,10 +21,10 @@ ChartJS.register(
   Legend
 )
 
-const years = ref(20)
-const initial = ref()
+const years = ref(15)
+const initial = ref(15000)
+const monthlyInvestment = ref(1200)
 const annualIncrease = ref(7)
-const monthlyInvestment = ref()
 
 const totalMoney = computed(() => {
   let decimalIncrease = annualIncrease.value / 100
@@ -39,7 +39,8 @@ const totalMoney = computed(() => {
     investmentValue = (investmentValue + monthlyInvestment.value) * monthlyReturnRate
   }
 
-  return investmentValue.toFixed(2)
+  // return investmentValue.toFixed(2)
+  return investmentValue.toFixed()
 })
 
 const formatedNumber = computed(() => {
@@ -66,7 +67,8 @@ const moneyArray = computed(() => {
   let investmentValue = initial.value;
   for (let i = 0; i < months; i++) {
     investmentValue = (investmentValue + monthlyInvestment.value) * monthlyReturnRate;
-    investmentValues.push(Math.round(investmentValue * 100) / 100);
+    investmentValues.push(Math.round(investmentValue));
+    // investmentValues.push(Math.round(investmentValue * 100) / 100);
   }
 
   const labels = []
@@ -202,8 +204,11 @@ const options = {
         <Icon name="ph:chart-line-up-bold" />
         Framtidsräknare
       </h1>
-      <h2 class="description">Här kan du räkna ut ditt slutliga kapital efter x antal</h2>
-      <h2 class="description">år efter investering</h2>
+      <!-- <h2 class="description">Här kan du räkna ut ditt slutliga kapital efter x antal</h2>
+      <h2 class="description">år efter investering</h2> -->
+      <h2 class="description">Om du månadssparar på börsen i till exempel fonder eller aktier ger du dina pengar bra
+        möjligheter att växa. Testa och se hur mycket du kan få ihop.</h2>
+      <!-- <h2 class="description"></h2> -->
     </div>
 
     <div class="card future">
