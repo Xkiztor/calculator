@@ -51,14 +51,18 @@ useHead({
   border-radius: var(--border-radius);
   padding: var(--padding);
   width: fit-content;
+  margin-bottom: 21px;
 }
 
 .page-container {
   /* min-width: 100%; */
   /* min-height: 100%; */
   /* padding: var(--padding); */
-  display: grid;
-  place-items: start center;
+  /* display: grid; */
+  /* place-items: start center; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 nav {
@@ -102,6 +106,7 @@ input::-webkit-inner-spin-button {
 }
 
 input[type=number] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 </style>

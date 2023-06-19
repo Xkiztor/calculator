@@ -30,7 +30,7 @@ html {
     'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
     sans-serif;
   min-height: 100vh;
-  min-width: 100vw;
+  width: 100vw;
 }
 
 * {
