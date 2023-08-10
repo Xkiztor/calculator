@@ -21,85 +21,6 @@ ChartJS.register(
   Legend
 )
 
-const years = ref(15)
-const initial = ref(15000)
-const monthlyInvestment = ref(1200)
-const annualIncrease = ref(7)
-
-const totalMoney = computed(() => {
-  let decimalIncrease = annualIncrease.value / 100
-
-  let months = years.value * 12
-
-  let monthlyReturnRate = 1 + decimalIncrease / 12
-
-  let investmentValue = initial.value
-
-  for (let i = 0; i < months; i++) {
-    investmentValue = (investmentValue + monthlyInvestment.value) * monthlyReturnRate
-  }
-
-  // return investmentValue.toFixed(2)
-  return investmentValue.toFixed()
-})
-
-const formatedNumber = computed(() => {
-  return totalMoney.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-})
-
-const moneyArray = computed(() => {
-
-  const annualReturnDecimal = annualIncrease.value / 100;
-
-  const months = years.value * 12;
-
-  const monthlyReturnRate = 1 + annualReturnDecimal / 12;
-
-
-  const noGrowth = []
-  let value = initial.value;
-  for (let i = 0; i < months; i++) {
-    value = (value + monthlyInvestment.value);
-    noGrowth.push(Math.round(value * 100) / 100);
-  }
-
-  const investmentValues = [];
-  let investmentValue = initial.value;
-  for (let i = 0; i < months; i++) {
-    investmentValue = (investmentValue + monthlyInvestment.value) * monthlyReturnRate;
-    investmentValues.push(Math.round(investmentValue));
-    // investmentValues.push(Math.round(investmentValue * 100) / 100);
-  }
-
-  const labels = []
-  for (let i = 0; i < investmentValues.length; i++) {
-    labels.push('Månad: ' + i + '  |  År: ' + Math.ceil(i / 12))
-  }
-
-  console.log(investmentValues);
-
-  const data = {
-    labels: labels,
-    // labels: Array.from({ length: investmentValues.length }, (_, i) => i + 1),
-    datasets: [
-      {
-        label: 'Kr',
-        backgroundColor: '#00c281',
-        borderColor: "#00c281",
-        data: investmentValues,
-      },
-      {
-        label: 'Utan Avkastning',
-        backgroundColor: '#2cb3c2',
-        borderColor: "#2cb3c2",
-        data: noGrowth
-      },
-    ]
-  }
-
-  return data
-})
-
 const options = {
   responsive: true,
   interaction: {
@@ -194,6 +115,153 @@ const options = {
 
   }
 }
+
+interface yearType {
+  year: number,
+  monthlyInvest: number,
+  changed: boolean,
+}
+
+const years = ref(5)
+const yearlyIncrease = ref(7)
+
+const yearsArray: Ref<yearType[]> = ref([])
+
+
+
+const updateYearsArray = () => {
+  yearsArray.value = []
+  for (let i = 0; i < years.value; i++) {
+    const year = {
+      year: i + 1,
+      monthlyInvest: 100,
+      changed: false,
+    }
+
+    yearsArray.value.push(year)
+  }
+}
+updateYearsArray()
+
+watch(years, () => {
+  console.log('years updated');
+  updateYearsArray()
+})
+
+
+const changeYear = (whatYear: number, newInvestValue: string) => {
+  console.log(whatYear);
+  console.log(newInvestValue);
+
+  let formattedInvest = parseFloat(newInvestValue)
+
+  yearsArray.value[whatYear - 1].monthlyInvest = formattedInvest
+
+  yearsArray.value[whatYear - 1].changed = true
+
+  for (let i = 0; i < yearsArray.value.length; i++) {
+    if (i > whatYear - 1) {
+      if (yearsArray.value[i].changed === true) {
+        console.log('changed');
+        return
+      } else {
+        console.log('not changed');
+        yearsArray.value[i].monthlyInvest = formattedInvest
+      }
+    }
+  }
+}
+
+
+const monthlyInvestments = computed(() => {
+  const array = []
+  for (let i = 0; i < yearsArray.value.length; i++) {
+    array.push(yearsArray.value[i].monthlyInvest)
+  }
+  return array
+})
+
+
+const totalMoney = computed(() => {
+  const totalMonths = years.value * 12
+  let totalAmount = 0
+
+  for (let i = 0; i < totalMonths; i++) {
+    const yearIndex = Math.floor(i / 12); // Determine the current year based on the number of months passed
+    const monthlyInvestment = monthlyInvestments.value[yearIndex] || 0; // Get the monthly investment for the current year
+    totalAmount += monthlyInvestment; // Add the monthly investment to the total amount
+
+    totalAmount += totalAmount * (yearlyIncrease.value / 100) / 12; // Apply the annual increase at the end of each month
+
+  }
+
+  return totalAmount
+})
+
+const totalMoneyArray = computed(() => {
+  const totalMonths = years.value * 12;
+  const totalAmounts = [];
+  let totalAmount = 0;
+
+  for (let i = 0; i < totalMonths; i++) {
+    const yearIndex = Math.floor(i / 12); // Determine the current year based on the number of months passed
+    const monthlyInvestment = monthlyInvestments.value[yearIndex] || 0; // Get the monthly investment for the current year
+    totalAmount += monthlyInvestment; // Add the monthly investment to the total amount
+
+    totalAmount += totalAmount * (yearlyIncrease.value / 100) / 12; // Apply the annual increase at the end of each month
+
+    totalAmounts.push(totalAmount); // Add the current total amount to the array
+  }
+
+  return totalAmounts;
+})
+
+const graphData = computed(() => {
+  const labels = []
+
+  for (let i = 0; i < totalMoneyArray.value.length; i++) {
+    labels.push(`Månad: ${i}  |  År: ${Math.ceil(i / 12)}`)
+  }
+
+  const data = {
+    labels: labels,
+    // labels: Array.from({ length: investmentValues.length }, (_, i) => i + 1),
+    datasets: [
+      {
+        label: 'Kr',
+        backgroundColor: '#00c281',
+        borderColor: "#00c281",
+        data: totalMoneyArray.value,
+      },
+      // {
+      //   label: 'Månadssparande',
+      //   backgroundColor: '#2cb3c2',
+      //   borderColor: "#2cb3c2",
+      //   data: monthlyInvestments.value
+      // },
+    ]
+  }
+
+  console.log(data);
+
+  return data
+})
+
+const formattedTotalMoney = computed(() => {
+  let roundedMoney
+
+  if (totalMoney.value < 10000) {
+    roundedMoney = Math.round(totalMoney.value / 100) * 100
+  } else if (totalMoney.value < 30000) {
+    roundedMoney = Math.round(totalMoney.value / 500) * 500
+  } else if (totalMoney.value < 100000) {
+    roundedMoney = Math.round(totalMoney.value / 1000) * 1000
+  } else {
+    roundedMoney = Math.round(totalMoney.value / 10000) * 10000
+  }
+
+  return roundedMoney.toFixed().toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+})
 </script>
 
 
@@ -201,46 +269,44 @@ const options = {
   <div class="page framtid">
     <div class="titles">
       <h1 class="number title">
-        <Icon name="ph:chart-line-up-bold" />
-        Framtidsräknare
+        <Icon name="ic:round-timeline" />
+        Framtidsräknaren
       </h1>
       <!-- <h2 class="description">Här kan du räkna ut ditt slutliga kapital efter x antal</h2>
       <h2 class="description">år efter investering</h2> -->
-      <h2 class="description">Om du månadssparar på börsen i till exempel fonder eller aktier ger du dina pengar bra
-        möjligheter att växa. Testa och se hur mycket du kan få ihop.</h2>
+      <h2 class="description">I denna räknare kan du ändra ditt månadssparande år till år.</h2>
       <!-- <h2 class="description"></h2> -->
     </div>
-
-    <div class="card future">
-      <div class="padding">
-        <div class="big-number">
-          <h1 v-if="formatedNumber === 'NaN'" class="number placeholder">- - -</h1>
-          <h1 v-else class="number">{{ formatedNumber }} kr</h1>
+    <div class="card">
+      <div>
+        <h1 class="number big-number">{{ formattedTotalMoney }} kr</h1>
+      </div>
+      <div class="settings">
+        <div class="after years">
+          <!-- <label for="">Antal år</label> -->
+          <input type="number" v-model.number="years">
         </div>
-        <div class="inputs">
-          <div class="years after">
-            <!-- <label>År</label> -->
-            <input type="number" v-model="years">
-          </div>
-          <div class="kronor-start after">
-            <!-- <label>Startbelopp</label> -->
-            <input type="number" v-model="initial">
-          </div>
-          <div class="monthly after">
-            <!-- <label>Investering per månaden</label> -->
-            <input type="number" v-model="monthlyInvestment">
-          </div>
-          <div class="percentage after">
-            <!-- <label>Årlig avkastning</label> -->
-            <input type="number" class="percentage" v-model="annualIncrease">
-          </div>
+        <div class="after annual-increase">
+          <!-- <label for="">Årlig Ökning %</label> -->
+          <input type="number" v-model.number="yearlyIncrease">
         </div>
-
+      </div>
+    </div>
+    <div>
+      <div class="years card">
+        <div v-for="year in yearsArray" class="year">
+          <label>År {{ year.year }}</label>
+          <!-- <h3>{{ year.monthlyInvest }} </h3> -->
+          <div class="after kronor">
+            <input type="number" :value="year.monthlyInvest" @input.number="changeYear(year.year, $event?.target?.value)">
+          </div>
+          <!-- <input type="number" v-model="year.monthlyInvest" @change="changeYear(year.year, year.monthlyInvest)"> -->
+        </div>
       </div>
     </div>
     <div class="card graph">
       <div class="padding">
-        <Line id="my-chart-id" :data="moneyArray" :options="options"></Line>
+        <Line id="my-chart-id" :data="graphData" :options="options"></Line>
       </div>
     </div>
   </div>
@@ -253,54 +319,45 @@ const options = {
   width: fit-content;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  /* align-items: flex-start; */
   padding-bottom: 58px;
 }
 
-.big-number h1 {
+.page.framtid .card {
+  padding: var(--padding);
+  width: 100%;
+}
+
+.year {
+  display: flex;
+  padding-left: var(--padding);
+  align-items: center;
+  gap: var(--padding);
+  margin: var(--padding) 0;
+}
+
+.year .after,
+.year .after input {
+  display: flex;
+  flex-grow: 1;
+}
+
+.page.framtid .settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding);
+}
+
+.page.framtid .settings,
+.page.framtid .settings input {
+  width: 100%;
+}
+
+.framtid .big-number {
   font-size: 4rem;
   line-height: 1;
   text-align: center;
   margin: 12px 0 32px 0;
-}
-
-.future .inputs {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-  place-items: center;
-}
-
-.future .inputs div {
-  display: grid;
-  /* grid-template-columns: 1fr 1fr; */
-  grid-template-columns: 1fr;
-  place-items: center;
-  gap: 1rem;
-
-  width: 100%;
-
-  text-align: center;
-}
-
-.future input {
-  width: 100%;
-}
-
-.card.graph {
-  width: 100%;
-}
-
-.future.card {
-  width: 100%;
-}
-
-.framtid .card {
-  padding: 0;
-}
-
-.framtid .card .padding {
-  padding: var(--padding);
 }
 
 .after {
@@ -320,19 +377,15 @@ const options = {
   opacity: 0.9;
 }
 
-.percentage.after::after {
-  content: '% / år';
-}
-
-.kronor-start.after::after {
-  content: 'kr från start';
+.kronor.after::after {
+  content: 'kr / månaden';
 }
 
 .years.after::after {
   content: 'år';
 }
 
-.monthly.after::after {
-  content: 'kr / månaden';
+.annual-increase.after::after {
+  content: '% / år';
 }
 </style>
