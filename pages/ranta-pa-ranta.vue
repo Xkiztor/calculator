@@ -216,8 +216,8 @@ const options = {
       </h1>
       <!-- <h2 class="description">Här kan du räkna ut ditt slutliga kapital efter x antal</h2>
       <h2 class="description">år efter investering</h2> -->
-      <h2 class="description">Om du månadssparar på börsen i till exempel fonder eller aktier ger du dina pengar bra
-        möjligheter att växa. Testa och se hur mycket du kan få ihop.</h2>
+      <div class="description">Med denna kan du räkna med ränta-på-rända effekten om du månadssparar på börsen i till
+        exempel fonder eller aktier.</div>
       <!-- <h2 class="description"></h2> -->
     </div>
 

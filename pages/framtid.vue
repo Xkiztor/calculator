@@ -274,7 +274,8 @@ const formattedTotalMoney = computed(() => {
       </h1>
       <!-- <h2 class="description">Här kan du räkna ut ditt slutliga kapital efter x antal</h2>
       <h2 class="description">år efter investering</h2> -->
-      <h2 class="description">I denna räknare kan du ändra ditt månadssparande år till år.</h2>
+      <h2 class="description">Ränta på ränta räknare fast med denna kan du ändra ditt månadssparande år till år.
+      </h2>
       <!-- <h2 class="description"></h2> -->
     </div>
     <div class="card">
